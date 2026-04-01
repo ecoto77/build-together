@@ -1,14 +1,12 @@
 import Navbar from "@/components/Navbar";
+import HeroCarousel from "@/components/HeroCarousel";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      {/* Placeholder content to test scroll behavior */}
-      <main className="pt-20">
-        <section id="inicio" className="min-h-screen flex items-center justify-center">
-          <p className="text-muted-foreground text-lg">Hero section — próximamente</p>
-        </section>
+      <main>
+        <HeroCarousel />
         <section id="productos" className="min-h-screen flex items-center justify-center bg-surface">
           <p className="text-muted-foreground text-lg">Productos — próximamente</p>
         </section>
