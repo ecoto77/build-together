@@ -31,7 +31,6 @@ const cardVariants = {
 
 const ServicesSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchFilter, setSearchFilter] = useState<SearchFilter>("name");
   const [selectedCategory, setSelectedCategory] = useState<{
     id: string;
     name: string;
