@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroCarousel from "@/components/HeroCarousel";
+import SeasonalPromoCarousel from "@/components/SeasonalPromoCarousel";
 import ServicesSection from "@/components/ServicesSection";
 
 const Index = () => {
