@@ -9,6 +9,7 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroCarousel />
+        <SeasonalPromoCarousel />
         <ServicesSection />
         <section id="nosotros" className="min-h-screen flex items-center justify-center">
           <p className="text-muted-foreground text-lg">Nosotros — próximamente</p>
