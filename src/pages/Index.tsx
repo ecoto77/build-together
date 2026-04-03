@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroCarousel from "@/components/HeroCarousel";
-import SeasonalPromoCarousel from "@/components/SeasonalPromoCarousel";
 import ServicesSection from "@/components/ServicesSection";
+import SeasonalPromoCarousel from "@/components/SeasonalPromoCarousel";
 
 const Index = () => {
   return (
@@ -9,8 +9,8 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroCarousel />
-        <SeasonalPromoCarousel />
         <ServicesSection />
+        <SeasonalPromoCarousel />
         <section id="nosotros" className="min-h-screen flex items-center justify-center">
           <p className="text-muted-foreground text-lg">Nosotros — próximamente</p>
         </section>
