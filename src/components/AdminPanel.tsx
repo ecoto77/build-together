@@ -97,6 +97,31 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
     }
   };
 
+  const handleUploadPromoImage = async (promoId: string, file: File) => {
+    const fileExt = file.name.split(".").pop();
+    const filePath = `${promoId}.${fileExt}`;
+    const { error: uploadError } = await supabase.storage
+      .from("promotions")
+      .upload(filePath, file, { upsert: true });
+    if (uploadError) {
+      toast.error("Error al subir imagen");
+      return;
+    }
+    const { data: urlData } = supabase.storage
+      .from("promotions")
+      .getPublicUrl(filePath);
+    const { error: updateError } = await supabase
+      .from("promotions")
+      .update({ image_url: urlData.publicUrl })
+      .eq("id", promoId);
+    if (updateError) {
+      toast.error("Error al actualizar promoción");
+    } else {
+      toast.success("Imagen subida correctamente");
+      queryClient.invalidateQueries({ queryKey: ["promotions"] });
+    }
+  };
+
   const handleChangeTheme = async (theme: string) => {
     const { error } = await supabase
       .from("site_settings")
