@@ -50,7 +50,7 @@ const SeasonalPromoCarousel = () => {
   return (
     <section
       className="relative py-20 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${bgImage})` }}
+      style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
     >
       {/* Overlay for readability */}
       <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
