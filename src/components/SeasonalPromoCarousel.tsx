@@ -15,7 +15,13 @@ const SeasonalPromoCarousel = () => {
   const { data: promotions } = usePromotions();
   const { data: settings } = useSiteSettings();
   const theme = settings?.find((s) => s.key === "promo_background_theme")?.value || "summer";
-  const bgImage = backgroundImages[theme] || bgSummer;
+
+  const [bgImage, setBgImage] = useState<string>("");
+
+  useEffect(() => {
+    const loader = backgroundImages[theme] || backgroundImages.summer;
+    loader().then((m) => setBgImage(m.default)).catch(() => setBgImage(""));
+  }, [theme]);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" });
   const [selectedIndex, setSelectedIndex] = useState(0);
