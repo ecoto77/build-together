@@ -4,14 +4,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { usePromotions, useSiteSettings } from "@/hooks/usePromotions";
 
-const bgSummer = new URL("@/assets/bg-summer.jpg", import.meta.url).href;
-const bgWinter = new URL("@/assets/bg-winter.jpg", import.meta.url).href;
-const bgChristmas = new URL("@/assets/bg-christmas.jpg", import.meta.url).href;
-
-const backgroundImages: Record<string, string> = {
-  summer: bgSummer,
-  winter: bgWinter,
-  christmas: bgChristmas,
+// Lazy-load background images to prevent module crash on transient 503s
+const backgroundImages: Record<string, () => Promise<{ default: string }>> = {
+  summer: () => import("@/assets/bg-summer.jpg"),
+  winter: () => import("@/assets/bg-winter.jpg"),
+  christmas: () => import("@/assets/bg-christmas.jpg"),
 };
 
 const SeasonalPromoCarousel = () => {
