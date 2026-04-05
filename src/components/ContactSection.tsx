@@ -18,14 +18,14 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Teléfono",
-    value: "+506 2222-3333",
-    href: "tel:+50622223333",
+    value: "+506 2473-4110",
+    href: "tel:+50624734110",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+506 8888-9999",
-    href: "https://wa.me/50688889999",
+    value: "+506 8925-8555",
+    href: "https://wa.me/50689258555",
   },
   {
     icon: Mail,
@@ -36,13 +36,13 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Dirección",
-    value: "San José, Costa Rica",
+    value: "Ubicación actual",
     href: null,
   },
   {
     icon: Clock,
     label: "Horario",
-    value: "Lun-Sáb: 8am - 8pm",
+    value: "L-S: 8am-8pm | Dom: 9am-7pm",
     href: null,
   },
 ];
