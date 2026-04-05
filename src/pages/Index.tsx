@@ -3,6 +3,7 @@ import HeroCarousel from "@/components/HeroCarousel";
 import ServicesSection from "@/components/ServicesSection";
 import SeasonalPromoCarousel from "@/components/SeasonalPromoCarousel";
 import AboutSection from "@/components/AboutSection";
+import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
   return (
@@ -13,9 +14,7 @@ const Index = () => {
         <ServicesSection />
         <SeasonalPromoCarousel />
         <AboutSection />
-        <section id="contacto" className="min-h-screen flex items-center justify-center bg-surface">
-          <p className="text-muted-foreground text-lg">Contacto — próximamente</p>
-        </section>
+        <ContactSection />
       </main>
     </div>
   );
