@@ -172,10 +172,18 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
         </SheetHeader>
 
         <Tabs defaultValue="products" className="mt-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="products">Productos</TabsTrigger>
             <TabsTrigger value="promos">Ofertas</TabsTrigger>
             <TabsTrigger value="theme">Fondo</TabsTrigger>
+            <TabsTrigger value="messages" className="relative">
+              Mensajes
+              {(contactMessages || []).filter((m) => !m.is_read).length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center">
+                  {(contactMessages || []).filter((m) => !m.is_read).length}
+                </span>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           {/* PRODUCTS TAB */}
