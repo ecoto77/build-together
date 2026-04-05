@@ -24,6 +24,29 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
   const { data: settings } = useSiteSettings();
   const currentTheme = settings?.find((s) => s.key === "promo_background_theme")?.value || "summer";
 
+  const { data: contactMessages } = useQuery({
+    queryKey: ["contact_messages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const handleMarkAsRead = async (id: string) => {
+    await supabase.from("contact_messages").update({ is_read: true }).eq("id", id);
+    queryClient.invalidateQueries({ queryKey: ["contact_messages"] });
+  };
+
+  const handleDeleteMessage = async (id: string) => {
+    await supabase.from("contact_messages").delete().eq("id", id);
+    queryClient.invalidateQueries({ queryKey: ["contact_messages"] });
+    toast.success("Mensaje eliminado");
+  };
+
   // Product form
   const [productForm, setProductForm] = useState({
     name: "",
