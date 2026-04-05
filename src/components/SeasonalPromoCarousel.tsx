@@ -78,7 +78,7 @@ const SeasonalPromoCarousel = () => {
             <div className="flex">
               {promotions.map((promo, i) => (
                 <div key={promo.id} className="flex-[0_0_100%] min-w-0">
-                  <div className="relative h-48 sm:h-56 lg:h-64 overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary/80">
+                  <div className="relative h-56 sm:h-64 lg:h-80 overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary/80">
                     <div className="absolute inset-0 flex">
                       {/* Content */}
                       <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16">
@@ -102,7 +102,7 @@ const SeasonalPromoCarousel = () => {
                         )}
                       </div>
                       {/* Image */}
-                      <div className="hidden sm:flex w-1/3 items-center justify-center p-4">
+                      <div className="hidden sm:flex w-2/5 items-center justify-center p-6">
                         {promo.image_url ? (
                           <img
                             src={promo.image_url}
@@ -110,7 +110,7 @@ const SeasonalPromoCarousel = () => {
                             className="max-h-full max-w-full object-contain rounded-xl drop-shadow-lg"
                           />
                         ) : (
-                          <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-xl bg-primary-foreground/10 border-2 border-dashed border-primary-foreground/30 flex items-center justify-center">
+                          <div className="w-40 h-40 lg:w-52 lg:h-52 rounded-xl bg-primary-foreground/10 border-2 border-dashed border-primary-foreground/30 flex items-center justify-center">
                             <span className="text-primary-foreground/40 text-xs text-center px-2">Imagen</span>
                           </div>
                         )}
