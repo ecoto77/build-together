@@ -8,8 +8,8 @@ import { useCategories, useProducts } from "@/hooks/useProducts";
 import { usePromotions, useSiteSettings } from "@/hooks/usePromotions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Trash2, Sun, Snowflake, TreePine, Save, Upload, Image } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Plus, Trash2, Sun, Snowflake, TreePine, Save, Upload, Image, Mail, MailOpen, Eye } from "lucide-react";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 
 interface AdminPanelProps {
   open: boolean;
@@ -23,6 +23,29 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
   const { data: promotions } = usePromotions();
   const { data: settings } = useSiteSettings();
   const currentTheme = settings?.find((s) => s.key === "promo_background_theme")?.value || "summer";
+
+  const { data: contactMessages } = useQuery({
+    queryKey: ["contact_messages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const handleMarkAsRead = async (id: string) => {
+    await supabase.from("contact_messages").update({ is_read: true }).eq("id", id);
+    queryClient.invalidateQueries({ queryKey: ["contact_messages"] });
+  };
+
+  const handleDeleteMessage = async (id: string) => {
+    await supabase.from("contact_messages").delete().eq("id", id);
+    queryClient.invalidateQueries({ queryKey: ["contact_messages"] });
+    toast.success("Mensaje eliminado");
+  };
 
   // Product form
   const [productForm, setProductForm] = useState({
@@ -149,10 +172,18 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
         </SheetHeader>
 
         <Tabs defaultValue="products" className="mt-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="products">Productos</TabsTrigger>
             <TabsTrigger value="promos">Ofertas</TabsTrigger>
             <TabsTrigger value="theme">Fondo</TabsTrigger>
+            <TabsTrigger value="messages" className="relative">
+              Mensajes
+              {(contactMessages || []).filter((m) => !m.is_read).length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center">
+                  {(contactMessages || []).filter((m) => !m.is_read).length}
+                </span>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           {/* PRODUCTS TAB */}
@@ -307,6 +338,50 @@ const AdminPanel = ({ open, onOpenChange }: AdminPanelProps) => {
                   )}
                 </button>
               ))}
+            </div>
+          </TabsContent>
+
+          {/* MESSAGES TAB */}
+          <TabsContent value="messages" className="space-y-3 mt-4">
+            <p className="text-sm text-muted-foreground">Mensajes recibidos del formulario de contacto:</p>
+            <div className="space-y-2 max-h-[500px] overflow-y-auto">
+              {(contactMessages || []).map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`p-4 rounded-xl border text-sm space-y-2 ${
+                    msg.is_read ? "border-border bg-card opacity-70" : "border-accent bg-accent/5"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {msg.is_read ? (
+                        <MailOpen className="w-4 h-4 text-muted-foreground" />
+                      ) : (
+                        <Mail className="w-4 h-4 text-accent" />
+                      )}
+                      <span className="font-semibold text-foreground">{msg.name}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(msg.created_at).toLocaleDateString("es-CR")}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{msg.email}</p>
+                  <p className="text-foreground">{msg.message}</p>
+                  <div className="flex gap-2 pt-1">
+                    {!msg.is_read && (
+                      <Button variant="outline" size="sm" onClick={() => handleMarkAsRead(msg.id)}>
+                        <Eye className="w-3 h-3 mr-1" /> Marcar leído
+                      </Button>
+                    )}
+                    <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeleteMessage(msg.id)}>
+                      <Trash2 className="w-3 h-3 mr-1" /> Eliminar
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {(!contactMessages || contactMessages.length === 0) && (
+                <p className="text-sm text-muted-foreground text-center py-8">No hay mensajes aún</p>
+              )}
             </div>
           </TabsContent>
         </Tabs>
