@@ -30,8 +30,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "info@farmacia.com",
-    href: "mailto:info@farmacia.com",
+    value: "fsm.pital@gmail.com",
+    href: "mailto:fsm.pital@gmail.com",
   },
   {
     icon: MapPin,
