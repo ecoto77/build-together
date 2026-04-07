@@ -2,6 +2,9 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
 interface AuthContextType {
   user: User | null;
   isAdmin: boolean;
@@ -25,14 +28,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    setIsAdmin(!!data);
+  const checkAdmin = async (userId: string, accessToken: string) => {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/user_roles?select=role&user_id=eq.${userId}&role=eq.admin&limit=1`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setIsAdmin(Array.isArray(data) && data.length > 0);
+      } else {
+        setIsAdmin(false);
+      }
+    } catch {
+      setIsAdmin(false);
+    }
   };
 
   useEffect(() => {
@@ -40,8 +55,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       async (_event, session) => {
         const u = session?.user ?? null;
         setUser(u);
-        if (u) {
-          await checkAdmin(u.id);
+        if (u && session?.access_token) {
+          await checkAdmin(u.id, session.access_token);
         } else {
           setIsAdmin(false);
         }
@@ -52,8 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const u = session?.user ?? null;
       setUser(u);
-      if (u) {
-        checkAdmin(u.id);
+      if (u && session?.access_token) {
+        checkAdmin(u.id, session.access_token);
       }
       setLoading(false);
     });
