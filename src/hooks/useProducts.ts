@@ -14,6 +14,7 @@ export function useProducts({ searchQuery, categoryId }: UseProductsOptions = {}
   return useQuery({
     queryKey: ["products", searchQuery, categoryId],
     queryFn: async () => {
+      console.log("[useProducts] Fetching products...", { searchQuery, categoryId });
       let query = supabase
         .from("products")
         .select("*, categories(name, slug)")
@@ -29,7 +30,11 @@ export function useProducts({ searchQuery, categoryId }: UseProductsOptions = {}
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+      if (error) {
+        console.error("[useProducts] Error:", error);
+        throw error;
+      }
+      console.log("[useProducts] Got", data?.length, "products");
       return data;
     },
   });
