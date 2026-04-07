@@ -14,23 +14,32 @@ export function useProducts({ searchQuery, categoryId }: UseProductsOptions = {}
   return useQuery({
     queryKey: ["products", searchQuery, categoryId],
     queryFn: async () => {
-      let query = supabase
-        .from("products")
-        .select("*, categories(name, slug)")
-        .order("name", { ascending: true });
+      const params = new URLSearchParams();
+      params.set("select", "*, categories(name, slug)");
+      params.set("order", "name.asc");
 
       if (categoryId) {
-        query = query.eq("category_id", categoryId);
+        params.set("category_id", `eq.${categoryId}`);
       }
 
       if (searchQuery && searchQuery.trim().length > 0) {
         const term = `%${searchQuery.trim()}%`;
-        query = query.or(`name.ilike.${term},active_ingredient.ilike.${term},presentation.ilike.${term}`);
+        params.set("or", `(name.ilike.${term},active_ingredient.ilike.${term},presentation.ilike.${term})`);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/products?${params.toString()}`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`Products fetch failed: ${res.status}`);
+      }
+      return res.json();
     },
   });
 }
