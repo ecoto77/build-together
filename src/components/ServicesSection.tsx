@@ -148,73 +148,72 @@ const ServicesSection = () => {
 
         {/* Category Grid */}
         {!isSearchActive && (
-          isCategoriesLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="rounded-2xl border border-border bg-card overflow-hidden">
-                  <div className="h-52 bg-muted animate-pulse" />
-                  <div className="p-6 space-y-3">
-                    <div className="h-6 w-2/3 bg-muted animate-pulse rounded" />
-                    <div className="h-4 w-full bg-muted animate-pulse rounded" />
-                    <div className="h-4 w-5/6 bg-muted animate-pulse rounded" />
+          <>
+            {isCategoriesLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="rounded-2xl border border-border bg-card overflow-hidden">
+                    <div className="h-52 bg-muted animate-pulse" />
+                    <div className="p-6 space-y-3">
+                      <div className="h-6 w-2/3 bg-muted animate-pulse rounded" />
+                      <div className="h-4 w-full bg-muted animate-pulse rounded" />
+                      <div className="h-4 w-5/6 bg-muted animate-pulse rounded" />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : categoriesError ? (
-            <div className="rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground">
-              No pudimos cargar las categorías en este momento.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {(categories || []).map((category, i) => {
-                const image = categoryImages[category.slug] || serviceMedicamentos;
-                return (
-                  <motion.div
-                    key={category.id}
-                    custom={i}
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    onClick={() =>
-                      setSelectedCategory({
-                        id: category.id,
-                        name: category.name,
-                        image,
-                      })
-                    }
-                    className="group rounded-2xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-                  >
-                    {/* Image */}
-                    <div className="relative h-52 overflow-hidden">
-                      <img
-                        src={image}
-                        alt={category.name}
-                        loading="lazy"
-                        width={640}
-                        height={512}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6">
-                      <h3 className="font-display text-xl font-bold text-foreground mb-2">
-                        {category.name}
-                      </h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {category.description}
-                      </p>
-                      <span className="inline-block mt-3 text-accent text-sm font-medium group-hover:underline">
-                        Ver productos →
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          )}
+                ))}
+              </div>
+            ) : categoriesError ? (
+              <div className="rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground">
+                No pudimos cargar las categorías en este momento.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {(categories || []).map((category, i) => {
+                  const image = categoryImages[category.slug] || serviceMedicamentos;
+                  return (
+                    <motion.div
+                      key={category.id}
+                      custom={i}
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      onClick={() =>
+                        setSelectedCategory({
+                          id: category.id,
+                          name: category.name,
+                          image,
+                        })
+                      }
+                      className="group rounded-2xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                    >
+                      <div className="relative h-52 overflow-hidden">
+                        <img
+                          src={image}
+                          alt={category.name}
+                          loading="lazy"
+                          width={640}
+                          height={512}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
+                      </div>
+                      <div className="p-6">
+                        <h3 className="font-display text-xl font-bold text-foreground mb-2">
+                          {category.name}
+                        </h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                          {category.description}
+                        </p>
+                        <span className="inline-block mt-3 text-accent text-sm font-medium group-hover:underline">
+                          Ver productos →
+                        </span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
 
