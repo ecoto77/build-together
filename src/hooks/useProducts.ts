@@ -44,11 +44,16 @@ export function useCategories() {
   return useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
+      console.log("[useCategories] Fetching categories...");
       const { data, error } = await supabase
         .from("categories")
         .select("*")
         .order("display_order", { ascending: true });
-      if (error) throw error;
+      if (error) {
+        console.error("[useCategories] Error:", error);
+        throw error;
+      }
+      console.log("[useCategories] Got", data?.length, "categories");
       return data;
     },
   });
