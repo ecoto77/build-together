@@ -35,16 +35,28 @@ export function useProducts({ searchQuery, categoryId }: UseProductsOptions = {}
   });
 }
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
 export function useCategories() {
   return useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("categories")
-        .select("*")
-        .order("display_order", { ascending: true });
-      if (error) throw error;
-      return data;
+      // Use raw fetch to bypass potential Supabase client issues
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/categories?select=*&order=display_order.asc`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`Categories fetch failed: ${res.status}`);
+      }
+      const data = await res.json();
+      return data as Category[];
     },
   });
 }
