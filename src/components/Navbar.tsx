@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Cross as Pharmacy, ShoppingCart, Menu, X, Shield, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import AdminLoginDialog from "@/components/AdminLoginDialog";
 import AdminPanel from "@/components/AdminPanel";
 
 const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Productos", href: "#productos" },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Inicio", href: "#inicio", sectionId: "inicio" },
+  { label: "Productos", href: "#productos", sectionId: "productos" },
+  { label: "Nosotros", href: "#nosotros", sectionId: "nosotros" },
+  { label: "Contacto", href: "#contacto", sectionId: "contacto" },
 ];
 
 const Navbar = () => {
