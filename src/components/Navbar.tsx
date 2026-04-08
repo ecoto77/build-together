@@ -27,23 +27,23 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const sectionIds = navLinks.map((l) => l.sectionId);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id);
+    const handleScroll = () => {
+      const sectionIds = navLinks.map((l) => l.sectionId);
+      const scrollY = window.scrollY + window.innerHeight * 0.3;
+      
+      let current = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) {
+          current = id;
         }
-      },
-      { rootMargin: "-20% 0px -60% 0px", threshold: 0 }
-    );
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
