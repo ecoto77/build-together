@@ -93,11 +93,13 @@ const HeroCarousel = () => {
                   {slides[current].subheadline}
                 </p>
                 <a
-                  href="#contacto"
+                  href="https://wa.me/50689258555?text=Hola,%20me%20gustaría%20consultar%20sobre%20sus%20productos"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-8 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all duration-300 hover:brightness-110 hover:shadow-lg hover:shadow-accent/30"
                 >
                   <MessageCircle size={18} />
-                  Contáctanos
+                  Escríbenos por WhatsApp
                 </a>
               </motion.div>
             </AnimatePresence>
